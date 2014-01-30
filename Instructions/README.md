@@ -22,10 +22,10 @@ Software / APIs
 
 In order to develop on the Raspberry Pi we utilised the following main tools:
 
-The [nano](http://en.wikipedia.org/wiki/GNU_nano) editor.
-The terminal and shell scripts; for compilation and running.
-The Pi4J Java API allowed us to program in a language we were already vaguely familiar with, while also providing us with direct communcation with the underlying Raspberry Pi hardware.
-The PICKAXE Editor was used for investigating ideas for scalability and future expansions of our project, however was not directly used in the finished model.
+* The [nano](http://en.wikipedia.org/wiki/GNU_nano) editor.
+* The terminal and shell scripts; for compilation and running.
+* The Pi4J Java API allowed us to program in a language we were already vaguely familiar with, while also providing us with direct communcation with the underlying Raspberry Pi hardware.
+* The PICKAXE Editor was used for investigating ideas for scalability and future expansions of our project, however was not directly used in the finished model.
 
 
 Code / Logic
