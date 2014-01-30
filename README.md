@@ -3,7 +3,7 @@
 
 A route finding project designed for the Raspberry Pi to run efficiently and effectively in a way that has commercial potential and the potential for environmental benefits.
 
-The project summary can be read [here](https://docs.google.com/presentation/d/1IT7IzIS8A0-KYTAcAWbCJjwBM5SjlmcIoS86TFdsmjU/edit?usp=sharing) or below.
+The project summary can be read [here](https://docs.google.com/presentation/d/1IT7IzIS8A0-KYTAcAWbCJjwBM5SjlmcIoS86TFdsmjU/pub?start=true&loop=false&delayms=3000) or below.
 
 Project summary
 ===============
