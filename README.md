@@ -8,8 +8,11 @@ Project summary
 ===============
 
 •	Introduction
+
 •	How it works
+
 •	Fuel efficiency
+
 •	Go green 
 
 Introduction
