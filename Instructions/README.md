@@ -44,6 +44,6 @@ Building
 1. The first step to setting up our project was to prototype traffic simulations on a HTML/Dart2Javascript page, in order to test the appropriateness of the algorithm.
 2. We then began building a traffic model board design to enable us to realistically test the Pi as a route finder. At this point we ordered the materials.
 3. With the materials having arrived, we constructed the initial electronics on a breaker board allowing us to safely connect up sensors to the Raspberry Pi GPIO pins.
-4. We wrote the software on the Pi proper, and began to configure it to communicate with the Pi4J API in order that we might interact with underlying hardware.
+4. We wrote the software on the Pi proper (i.e. the Nano software), and began to configure it to communicate with the Pi4J API in order that we might interact with underlying hardware.
 5. Then we began the testing process and started to combine the electronics with the software side of the project.
 6. We finalised the program, allowing the Pi to generate optimised routes based on the input data and variable assumptions.
