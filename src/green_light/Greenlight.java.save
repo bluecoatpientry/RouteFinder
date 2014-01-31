@@ -1,0 +1,114 @@
+//Greenlight
+package green_light;
+
+import java.util.Collections;
+import java.util.ArrayList;
+
+import com.pi4j.io.serial.*;
+import com.pi4j.io.gpio.*;
+import com.pi4j.io.gpio.event.*;
+
+public class Greenlight {
+
+    static ArrayList<Vertex> nodes = new ArrayList<>();
+    static ArrayList<Edge> edges = new ArrayList<>();
+    public static int NODE_COUNT = 11;
+    static ArrayList<Integer> pixelXLoc = new ArrayList<>();
+    static ArrayList<Integer> pixelYLoc = new ArrayList<>();
+    static String[] colors = {"red", "yellow", "blue", "green", "brown", "grey", "black", "orange", "cyan", "magenta", "#CB4154"};
+    static Graph simGraph;
+
+    static GpioPinDigitalInput inputPin1 = null;
+    static GpioPinDigitalInput inputPin2 = null;
+    static GpioPinDigitalInput inputPin3 = null;
+    static ArrayList<GpioPinDigitalInput> pinSensors = new ArrayList<>(24);
+    static ArrayList<Integer> trafficDensities = new ArrayList<>(24);
+
+    public static void addLane(String laneId, int sourceLocNo, int destLocNo, int duration) {
+        Edge lane = new Edge(laneId, nodes.get(sourceLocNo), nodes.get(destLocNo), duration);
+        edges.add(lane);
+    }
+
+    public static void addReverses() {
+        ArrayList<Edge> nonReversedEdges = simGraph.edges;
+        Collections.reverse(simGraph.edges);
+        simGraph.edges.addAll(nonReversedEdges);
+    }
+
+    public static void main(String[] args) {
+        for (int i = 0; i < NODE_COUNT; i++) {
+            Vertex location = new Vertex(i, String.valueOf(i));
+            nodes.add(location);
+        }
+
+        addLane("Edge_0", 0, 1, 85);
+        addLane("Edge_1", 0, 2, 217);
+        addLane("Edge_2", 0, 4, 173);
+        addLane("Edge_3", 2, 6, 186);
+        addLane("Edge_4", 2, 7, 103);
+        addLane("Edge_5", 3, 7, 183);
+        addLane("Edge_6", 5, 8, 250);
+        addLane("Edge_7", 8, 9, 84);
+        addLane("Edge_8", 7, 9, 167);
+        addLane("Edge_9", 4, 9, 502);
+        addLane("Edge_10", 9, 10, 40);
+        addLane("Edge_11", 1, 10, 600);
+
+        // Lets check from location Loc_1 to Loc_10
+        simGraph = new Graph(nodes, edges);
+        DAlgorithm dijkstra = new DAlgorithm(simGraph);
+
+        int source = 0;
+        int dest = 10;
+
+        addReverses();
+
+        dijkstra.execute(nodes.get(source)); ///source was 0
+        ArrayList<Vertex> path = dijkstra.getPath(nodes.get(dest)); // dest was 10
+
+        assert (path != null);
+        assert (path.size() > 0);
+
+        for (Vertex vertex : path) {
+            System.out.println("ROUTE: " + vertex);
+        }
+
+        final Serial serial = SerialFactory.createInstance();
+        serial.addListener(new SerialDataListener() {
+             @Override
+             public void dataReceived(SerialDataEvent event) {
+                  System.out.println(event.getData());
+             }
+        });
+
+        try {
+            serial.open("1", 2400);
+            System.out.println(Serial.DEFAULT_COM_PORT);
+        } catch (SerialPortException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+
+        final GpioController gpio = GpioFactory.getInstance();
+	final GpioPinDigitalInput myInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_DOWN);
+	myInput.addListener(new GpioPinListenerDigital() {
+            @Override
+            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+                System.out.println("GPIO PIN STATE CHANGE: " + event.getPin() + "= " + event.getState());
+                System.out.println("Car detected at sensor 1"); //Convert to serial
+                final GpioPinDigitalOutput pin = GpioFactory.getInstance().provisionDigitalOutputPin(RaspiPin.GPIO_01, "Sensor1Out");
+                pin.toggle();
+               //inputPin1.toggle();
+            }
+        });
+        //Thread.sleep(10000);
+        final GpioPinDigitalOutput inputPin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "Sensor1In");
+	System.out.println("--> GPIO state should be: ON");
+	try {
+        Thread.sleep(10000);
+	inputPin1.low();
+        Thread.sleep(10000);
+        inputPin1.high();
+        } catch (Exception e) { }
+    }
+}
