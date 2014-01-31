@@ -18,6 +18,10 @@ Hardware / Electronics
 * Solder                               - N/A, Incredibly cheap in bulk
 * Wire                                 - N/A, Incredibly cheap in bulk
 
+The total cost for the basic project we finalized, was £23 plus wire and solder.
+For a scaled up project, with four traffic junctions, utilization two Pickaxe boards, the total cost comes to around £81 plus wire and solder.
+
+
 Scaling the product up
 ======================
 
